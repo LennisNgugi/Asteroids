@@ -1,0 +1,483 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>The Asteroids</title>
+    <link rel="stylesheet" href="StyleSheet.css" />
+</head>
+<body>
+    <canvas id="canvas" width="1640" height="500"></canvas>
+        <script src="sprites\saucer.js"></script>
+        <script src="sprites\pad.js"></script>
+        <script src="sprites\pad2.js"></script>
+        <script src="sprites\pad3.js"></script>
+        <script src="sprites\pad3.js"></script>
+        <script src="sprites\pad4.js"></script>
+        <script src="sprites\pad5.js"></script>
+        <script src="sprites\pad6.js"></script>
+        <script src="sprites\pad7.js"></script>
+        <script src="sprites\pad8.js"></script>
+        <script src="sprites\pad9.js"></script>
+        <script src="sprites\pad10.js"></script>
+        <script src="sprites\pad11.js"></script>
+        <script src="sprites\pad12.js"></script>
+        <script src="sprites\pad13.js"></script>
+        <script src="sprites\pad14.js"></script>
+        <script src="sprites\pad15.js"></script>
+        <script src="sprites\pad16.js"></script>
+        <script src="sprites\pad17.js"></script>
+        <script src="sprites\pad18.js"></script>
+        <script src="sprites\pad19.js"></script>
+        <script src="sprites\pad20.js"></script>
+        <script src="sprites\pad21.js"></script>
+        <script src="sprites\pad22.js"></script>
+        <script src="sprites\pad23.js"></script>
+        <script src="sprites\pad24.js"></script>
+        <script src="sprites\pad25.js"></script>
+        <script src="sprites\pad26.js"></script>
+        <script src="sprites\pad27.js"></script>
+        <script src="sprites\pad28.js"></script>
+        <script src="sprites\pad29.js"></script>
+        <script src="sprites\pad30.js"></script>
+        <script src="classes\keycode.js"></script>
+        <script src="classes\vector.js"></script>
+        <script src="classes\acceleration.js"></script>
+        <script src="classes\collision.js"></script>
+    <script>
+        //The Following timer code was found at (https://www.w3schools.com/howto/howto_js_countdown.asp) and was created by W3Schools. 
+function countDown(secs,elem) {
+	var element = document.getElementById(elem);
+	element.innerHTML = "You've got "+secs+" seconds to get to the green space area";
+	if(secs < 1) {
+		clearTimeout(timer);
+		element.innerHTML = '<h2>Countdown Complete!</h2>';
+        //This will refresh the page which will restart the game
+		element.innerHTML += '<a href="#">Click here now</a>';
+	}
+	secs--;
+	var timer = setTimeout('countDown('+secs+',"'+elem+'")',555);
+}
+        //////////////////////////////////////////////////////////
+    </script>
+    <div id="status"></div>
+    <script>countDown(555,"status");</script>
+        <script>
+
+            //this function will always be executed when the page loads
+            window.onload = function () {
+                //create a reference to the canvas
+                var canvas = document.getElementById('canvas'),
+                    //access the 2D drawing API
+                    context = canvas.getContext('2d'),
+                    //new instance of the Saucer class
+                    ship = new Saucer(),
+                    //create a new instance of the vector class
+                    vector = new Vector(25, 1),
+                    //create a new acceleration object
+                    acceleraton = new Accelerate(.001),
+                    //new instance of the landing pad class
+                    pad = new Pad()
+                    pad2 = new Pad2()
+                    pad3 = new Pad3()
+                    pad4 = new Pad4()
+                    pad5 = new Pad5()
+                    pad6 = new Pad6()
+                    pad7 = new Pad7()
+                    pad8 = new Pad8()
+                    pad9 = new Pad9()
+                    pad10 = new Pad10()
+                    pad11 = new Pad11()
+                    pad12 = new Pad12()
+                    pad13 = new Pad13()
+                    pad14 = new Pad14()
+                    pad15 = new Pad15()
+                    pad16 = new Pad16()
+                    pad17 = new Pad17()
+                    pad18 = new Pad18()
+                    pad19 = new Pad19()
+                    pad20 = new Pad20()
+                    pad21 = new Pad21()
+                    pad22 = new Pad22()
+                    pad23 = new Pad23()
+                    pad24 = new Pad24()
+                    pad25 = new Pad25()
+                    pad26 = new Pad26()
+                    pad27 = new Pad27()
+                    pad28 = new Pad28()
+                    pad29 = new Pad29()
+                    pad30 = new Pad30()
+                    
+                    //create a new instance of the collision detection class
+                    collision = new Collision();
+
+                //set the position of the landing pad
+                pad.X = 1232;
+                pad.Y = 400;
+
+                pad2.X = 800;
+                pad2.Y = 248;
+
+                pad3.x = 825;
+                pad3.Y = 270;
+
+                pad4.X = 920;
+                pad4.Y = 160;
+
+                pad5.X = 600;
+                pad5.Y = 260;
+
+                pad6.X = 500;
+                pad6.Y = 280;
+
+                pad7.X = 760;
+                pad7.Y = 270;
+
+                pad8.X = 880;
+                pad8.Y = 90;
+
+                pad9.X = 830;
+                pad9.Y = 150;
+
+                pad10.X = 970;
+                pad10.Y = 300;
+
+                pad11.X = 1930;
+                pad11.Y = 120;
+
+                pad12.X = 1040;
+                pad12.Y = 185;
+
+                pad13.X = 1400;
+                pad13.Y = 275;
+
+                pad14.X = 1370;
+                pad14.Y = 195;
+
+                pad15.X = 1280;
+                pad15.Y = 295;
+
+                pad16.X = 1430;
+                pad16.Y = 265;
+
+                pad17.X = 1500;
+                pad17.Y = 395;
+
+                pad18.X = 1340;
+                pad18.Y = 482;
+
+                pad19.X = 1200;
+                pad19.Y = 99;
+
+                pad20.X = 1750;
+                pad20.Y = 147;
+
+                pad21.X = 1785;
+                pad21.Y = 160;
+
+                pad22.X = 1835;
+                pad22.Y = 159;
+
+                pad23.X = 2660;
+                pad23.Y = 165;
+
+                pad24.X = 2279;
+                pad24.Y = 173;
+
+                pad25.X = 2750;
+                pad25.Y = 184;
+
+                pad26.X = 1095;
+                pad26.Y = 283;
+
+                pad27.X = 800;
+                pad27.Y = 158;
+
+                pad28.X = 985;
+                pad28.Y = 275;
+
+                pad29.X = 840;
+                pad29.Y = 258;
+
+                pad30.X = 1246;
+                pad30.Y = 200;
+
+                //set the vector for the ship
+                //ship.setVector(vector);
+
+                //function to handle keyboard events
+                function KeyboardEventHandler(event) {
+                    //if the up arrow is pressed
+                    if (event.keyCode == keycode.UP) {
+                        //acceleraton.VThrust(.01);
+                        ship.Y -= 20;
+                        
+                    }
+                    //if the left arrow is pressed
+                    if (event.keyCode == keycode.LEFT) {
+                        //acceleraton.HThrust(.01);
+                        ship.X -= 5;
+                    }
+                    //if the right arrow is pressed
+                    if (event.keyCode == keycode.RIGHT) {
+                        //acceleraton.HThrust(-.01);
+                        ship.X += 5;
+                    }
+                    //if the down arrow is pressed
+                    if (event.keyCode == keycode.DOWN) {
+                       //acceleraton.Halt();
+                        ship.Y++;
+                    }
+                }
+
+                //add a listener for the keydown event
+                window.addEventListener('keydown', KeyboardEventHandler, false);
+
+
+                (function drawFrame() {
+                    //clear the canvas for the new frame
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    //draw the lander
+                    ship.draw(context);
+                    //move the saucer
+                    ship.move();
+                    //apply the acceleration to the ship
+                    ship.accelerate(acceleraton);
+                    //get the next animation frame
+                    window.requestAnimationFrame(drawFrame);
+                    //draw the landing pad
+                    pad.draw(context);
+                    pad2.draw(context);
+                    pad3.draw(context);
+                    pad4.draw(context);
+                    pad5.draw(context);
+                    pad6.draw(context);
+                    pad7.draw(context);
+                    pad8.draw(context);
+                    pad9.draw(context);
+                    pad10.draw(context);
+                    pad11.draw(context);
+                    pad12.draw(context);
+                    pad13.draw(context);
+                    pad14.draw(context);
+                    pad15.draw(context);
+                    pad16.draw(context);
+                    pad17.draw(context);
+                    pad18.draw(context);
+                    pad19.draw(context);
+                    pad20.draw(context);
+                    pad21.draw(context);
+                    pad22.draw(context);
+                    pad23.draw(context);
+                    pad24.draw(context);
+                    pad25.draw(context);
+                    pad26.draw(context);
+                    pad27.draw(context);
+                    pad28.draw(context);
+                    pad29.draw(context);
+                    pad30.draw(context);
+                    
+                    //move the square to the right
+                    pad2.move();
+                    pad3.move();
+                    pad4.move();
+                    pad5.move();
+                    pad6.move();
+                    pad7.move();
+                    pad8.move();
+                    pad9.move();
+                    pad10.move();
+                    pad11.move();
+                    pad12.move();
+                    pad13.move();
+                    pad14.move();
+                    pad15.move();
+                    pad16.move();
+                    pad17.move();
+                    pad18.move();
+                    pad19.move();
+                    pad20.move();
+                    pad21.move();
+                    pad22.move();
+                    pad23.move();
+                    pad24.move();
+                    pad25.move();
+                    pad26.move();
+                    pad27.move();
+                    pad28.move();
+                    pad29.move();
+                    pad30.move();
+                    //get the next animation frame
+                  //  window.requestAnimationFrame(drawFrame);
+                     //check to see if there is a collision or not 
+                    if (collision.Overlapping(ship, pad))
+                    {
+                        //halt the ship 
+                        alert("Game Complete");
+                        //ship.halt()
+                    }
+                    if (collision.Overlapping(ship, pad2))
+                    {
+                        //Message box will appear stating Collision
+                        //alert("Collision");
+                    }
+                    if (collision.Overlapping(ship, pad3))
+                    {
+                        //Message box will appear stating Collision
+                        alert("Collision");
+                       
+                    }
+                    if (collision.Overlapping(ship, pad4))
+                    {
+                        //Message box will appear stating Collision
+                        alert("Collision");
+                       
+                    }
+                    if (collision.Overlapping(ship, pad5))
+                    {
+                        //Message box will appear stating Collision
+                        alert("Collision");
+                        
+                    }
+                    if (collision.Overlapping(ship, pad6))
+                    {
+                        //Message box will appear stating Collision
+                        alert("Collision");
+                        
+                    }
+                    if (collision.Overlapping(ship, pad7))
+                    {
+                        //Message box will appear stating Collision
+                        alert("Collision");
+                        
+                    }
+                    if (collision.Overlapping(ship, pad8))
+                    {
+                        //Message box will appear stating Collision
+                        alert("Collision");
+                  
+                    }
+                    if (collision.Overlapping(ship, pad9))
+                    {
+                        //Message box will appear stating Collision
+                        //alert("Collision");
+           
+                    }
+                    if (collision.Overlapping(ship, pad10))
+                    {
+                        //Message box will appear stating Collision
+                        //alert("Collision");
+                    }
+                    if (collision.Overlapping(ship, pad11))
+                    {
+                        //Message box will appear stating Collision
+                        alert("Collision");
+                        //halt the ship 
+                    }
+					if (collision.Overlapping(ship, pad12))
+					{
+					    //Message box will appear stating Collision
+					    //alert("Collision");
+					    ship.halt()
+					}
+					if (collision.Overlapping(ship, pad13))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad14))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad15))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad16))
+					{
+					    //Message box will appear stating Collision 
+                        alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad17))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad18))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad19))
+					{
+					    //alert("Collision")
+					}
+					if (collision.Overlapping(ship, pad20))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad21))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad22))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad23))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad24))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad25))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad26))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad27))
+					{
+					    //alert("Collision");
+					    
+					}
+					if (collision.Overlapping(ship, pad28))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad29))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision");
+					}
+					if (collision.Overlapping(ship, pad30))
+					{
+					    //Message box will appear stating Collision
+					    alert("Collision")
+					}
+
+                    //check to see if there is a collision or not
+                   // if (collision.Overlapping(ship, pad, Pad2, pad3, pad4, pad5, pad6, pad7, pad8, pad9, pad10, pad11, pad12, pad13, pad14, pad15))
+                    //{
+                        //alert that a collision has taken place
+                        //alert("collision");
+                        
+                    //}
+			})();
+            }
+    </script>
+</body>
+</html>

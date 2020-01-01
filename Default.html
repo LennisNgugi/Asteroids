@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="StyleSheet.css" />
+</head>
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+        <script src="sprites/square.js"></script>
+        <script>
+            //this function will always be executed when the page loads
+            window.onload = function ()
+            {
+                //create a reference to the canvas
+                var canvas = document.getElementById('canvas'),
+                    //access the 2D drawing API
+                    context = canvas.getContext('2d'),
+                    //new instance of the Square class
+                    square = new Square();
+
+                (function drawFrame() {
+                    //clear the canvas for the new frame
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    //draw the sprite
+                    square.draw(context);
+                    //move the square to the right
+                    square.move();
+                    //get the next animation frame
+                    window.requestAnimationFrame(drawFrame);
+                })();
+            }
+    </script>
+</body>
+</html>
